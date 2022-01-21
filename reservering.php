@@ -14,7 +14,7 @@ if(isset($_POST['submit'])){
     $result = mysqli_query($db, $codeChecker);
     $reservation = mysqli_fetch_assoc($result);
 
-    //If the id doesn't exist, notify user that they didn't give a valid input
+    //als het id niet bestaat krijgt de gebruiker een foutmelding
     if (mysqli_num_rows($result) == 0) {
         $nonExistentId = 'Vul aub een geldige combinatie in';
     }
@@ -24,10 +24,12 @@ if(isset($_POST['submit'])){
             $codeTrue = true;
         }
     }
-} else if (isset($_POST['delete'])){
+}
+
+if (isset($_POST['delete'])){
     $id             = mysqli_escape_string($db, $_POST['id']);
     $uniqueCode     = mysqli_escape_string($db, $_POST['uniqueCode']);
-    $deleteQuery = "DELETE FROM reserveringen WHERE id = '$id' && unique_code = '$uniqueCode'";
+    $deleteQuery    = "DELETE FROM reserveringen WHERE id = '$id' && unique_code = '$uniqueCode'";
     mysqli_query($db, $deleteQuery);
 }
 
@@ -39,9 +41,11 @@ if(isset($_POST['submit'])){
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Reservering</title>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="js/script.js"></script>
 </head>
 <body>
+<!-- navigatie -->
 <header class="primary-header flex">
     <div>
         <!-- wanneer je op het plaatje klikt wordt je terug naar de home page gestuurd -->
@@ -107,7 +111,7 @@ if(isset($_POST['submit'])){
         <?php }?>
 
         <?php if (isset($reservation) && isset($codeTrue)){?>
-            <table class="reserveringTable">
+            <table class="ReservationTable">
                 <thead>
                 <tr>
                     <th>Naam</th>
@@ -123,12 +127,14 @@ if(isset($_POST['submit'])){
                     <tbody>
                         <tr>
                             <td><?= $reservation['name'] ?></td>
-                            <td><?= $reservation['personen'] ?></td>
+                            <td><?= $reservation['amountOfPeople'] ?></td>
+                            <!-- format date naar de Europese manier van de datum schrijven -->
                             <td><?= $newDate = date("d-m-Y",strtotime($reservation['date'])); ?></td>
+                            <!-- zorgt dat alleen de uren en minuten getoond worden, als je dit niet zou doen zouden ook de seconden getoond worden -->
                             <td><?= $newTime = date("H:i", strtotime($reservation['time'])); ?></td>
                             <td><?= $reservation['email'] ?></td>
                             <td><?= $reservation['phone_number'] ?></td>
-                            <td><?= $reservation['opmerkingen'] ?></td>
+                            <td><?= $reservation['comment'] ?></td>
                             <td>
                                 <a href="edit.php?id=<?= $reservation['id'] ?>&uniqueCode=<?= $reservation['unique_code'] ?>" class="hrefToButton">edit</a>
                             </td>
@@ -149,9 +155,23 @@ if(isset($_POST['submit'])){
 
 </main>
 
-<footer>
+<div class="footer">
+    <div class="openingstijden">
+        <strong>openingstijden</strong>
+        <p>Maandag t/m Zondag 10.00-17.00</p>
+    </div>
+    <div class="socials">
+        <a href="https://facebook.com/plstkcafe" target="_blank"><i class="fa fa-facebook-f"></i></a>
 
-</footer>
+        <a href="https://instagram.com/plstkcafe/" target="_blank"><i class="fa fa-instagram"></i></a>
+    </div>
+    <div class="contact">
+        <strong>Contact</strong>
+        <p> info@plstkcafe.nl</p>
+        <p>+31 174 785 016</p>
+        <p>Helmweg 7, 3151HE, Hoek van Holland</p>
+    </div>
+</div>
 
 </body>
 </html>

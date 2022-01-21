@@ -1,6 +1,7 @@
 <!-- Reserveringen in de database uitlezen -->
 <?php
 session_start();
+
 /* Checkt of de gebruiker de juiste rechten heeft om deze pagina te kunnen zien */
 if (isset($_SESSION)) {
     $userType = $_SESSION['usertype'];
@@ -52,6 +53,7 @@ if (isset($_POST['delete'])){
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Reserveringen</title>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="js/script.js"></script>
 
 </head>
@@ -117,7 +119,7 @@ if (isset($_POST['delete'])){
 
     <?php }?>
 
-    <table class="reserveringTable">
+    <table class="ReservationTable">
         <thead>
             <tr>
                 <th>Naam</th>
@@ -127,8 +129,6 @@ if (isset($_POST['delete'])){
                 <th>Email</th>
                 <th>Nummer</th>
                 <th>Opmerking</th>
-                <th>Edit</th>
-                <th>Delete</th>
             </tr>
         </thead>
         <?php if (isset($reservations)){?>
@@ -136,12 +136,12 @@ if (isset($_POST['delete'])){
                 <?php foreach($reservations as $reservation) {?>
                     <tr>
                         <td><?= $reservation['name'] ?></td>
-                        <td><?= $reservation['personen'] ?></td>
+                        <td><?= $reservation['amountOfPeople'] ?></td>
                         <td><?= $newDate = date("d-m-Y",strtotime($reservation['date'])); ?></td>
                         <td><?= $newTime = date("H:i", strtotime($reservation['time'])); ?></td>
                         <td><?= $reservation['email'] ?></td>
                         <td><?= $reservation['phone_number'] ?></td>
-                        <td><?= $reservation['opmerkingen'] ?></td>
+                        <td><?= $reservation['comment'] ?></td>
                         <td>
                             <form action="" method="post">
                                 <button id="editBtn" value="<?= $reservation['id'] ?>">Edit</button>
@@ -166,9 +166,23 @@ if (isset($_POST['delete'])){
 
 </main>
 
-<footer>
+<div class="footer">
+    <div class="openingstijden">
+        <strong>openingstijden</strong>
+        <p>Maandag t/m Zondag 10.00-17.00</p>
+    </div>
+    <div class="socials">
+        <a href="https://facebook.com/plstkcafe" target="_blank"><i class="fa fa-facebook-f"></i></a>
 
-</footer>
+        <a href="https://instagram.com/plstkcafe/" target="_blank"><i class="fa fa-instagram"></i></a>
+    </div>
+    <div class="contact">
+        <strong>Contact</strong>
+        <p> info@plstkcafe.nl</p>
+        <p>+31 174 785 016</p>
+        <p>Helmweg 7, 3151HE, Hoek van Holland</p>
+    </div>
+</div>
 
 </body>
 </html>

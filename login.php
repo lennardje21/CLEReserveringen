@@ -1,8 +1,15 @@
 <?php
 session_start();
 
+if (isset($_SESSION['username'])){
+    header("Location: home.php");
+    exit;
+}
+
 /** @var $db */
+
 require_once 'includes/reserveringenDB.php';
+
 /* login functie */
 if (isset($_POST['login'])) {
     /* haalt de login data op en checkt op sql injection */
@@ -10,9 +17,10 @@ if (isset($_POST['login'])) {
     $loginPassword = mysqli_escape_string($db, $_POST['password']);
 
     /* checkt of de ingevulde username bestaat */
-    $accountChecker = "SELECT * FROM accounts Where username='$loginUsername'";
-    $accountCheckResult = mysqli_query($db, $accountChecker);
-    $userNameExist = mysqli_num_rows($accountCheckResult);
+    $accountChecker         = "SELECT * FROM accounts Where username='$loginUsername'";
+    $accountCheckResult     = mysqli_query($db, $accountChecker);
+    $userNameExist          = mysqli_num_rows($accountCheckResult);
+
     if ($userNameExist === 0){
         /* foutmelding als de username niet bekend is */
         $wrongCombo = 'De combinatie van wachtwoord en username is niet bij ons bekend';
@@ -37,14 +45,15 @@ if (isset($_POST['login'])) {
 
 }
 
+/* User registreren  */
 if (isset($_POST['submit'])){
     /* haalt de ingevulde data op en checkt op sql injection */
     $registerUsername       = mysqli_escape_string($db, $_POST['registerUsername']);
     $registerEmail          = mysqli_escape_string($db, $_POST['registerEmail']);
     $registerPassword       = mysqli_escape_string($db, $_POST['registerPassword']);
-    $hashedPassword = password_hash($registerPassword, PASSWORD_DEFAULT);
+    $hashedPassword         = password_hash($registerPassword, PASSWORD_DEFAULT);
 
-    /* checkt of de ingevulde username uniek is */
+    /* checkt of de ingevulde username uniek is of al in gebruik */
     $usernameChecker = "SELECT * FROM accounts WHERE username='$registerUsername'";
     $usernameResult = mysqli_query($db, $usernameChecker);
 
@@ -57,6 +66,7 @@ if (isset($_POST['submit'])){
     $emailResult  = mysqli_query($db, $emailChecker);
 
     if (mysqli_num_rows($emailResult) > 0) {
+        /* Foutmelding wanneer een email adres al in gebruik is */
         $uniqueEmail = "Dit email adres is al in gebruik";
     }
 
@@ -73,7 +83,7 @@ if (isset($_POST['submit'])){
     }
 
     if (empty($errors)){
-        /* voegt een nieuw account toe aan de accounts database */
+        /* voegt een nieuw account toe aan de accounts database(alleen als er geen errors aanwezig zijn) */
         $query = "INSERT INTO accounts (username, email, password)
                     VALUES ('$registerUsername', '$registerEmail', '$hashedPassword')";
         $result = mysqli_query($db, $query);
@@ -88,9 +98,11 @@ if (isset($_POST['submit'])){
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="js/script.js"></script>
 </head>
 <body class="BodyReserveren">
+<!-- navigatie -->
 <header class="primary-header flex">
     <div>
         <!-- wanneer je op het plaatje klikt wordt je terug naar de home page gestuurd -->
@@ -149,10 +161,10 @@ if (isset($_POST['submit'])){
                     echo $wrongCombo;
                 } ?>
                 <br>
-                <label for="username">Username:</label>
+                <label for="username">Gebruikersnaam:</label>
                 <input required type="text" name="username" id="username" value="<?= isset($loginUsername) ? $loginUsername : ''?>">
 
-                <label for="password">Password:</label>
+                <label for="password">Wachtwoord:</label>
                 <input required type="password" name="password" id="password" value="<?= isset($loginPassword) ? $loginPassword : ''?>">
 
                 <input type="submit" name="login" id="login" value="login">
@@ -185,9 +197,23 @@ if (isset($_POST['submit'])){
     </div>
 </main>
 
-<footer>
+<div class="footer">
+    <div class="openingstijden">
+        <strong>openingstijden</strong>
+        <p>Maandag t/m Zondag 10.00-17.00</p>
+    </div>
+    <div class="socials">
+        <a href="https://facebook.com/plstkcafe" target="_blank"><i class="fa fa-facebook-f"></i></a>
 
-</footer>
+        <a href="https://instagram.com/plstkcafe/" target="_blank"><i class="fa fa-instagram"></i></a>
+    </div>
+    <div class="contact">
+        <strong>Contact</strong>
+        <p> info@plstkcafe.nl</p>
+        <p>+31 174 785 016</p>
+        <p>Helmweg 7, 3151HE, Hoek van Holland</p>
+    </div>
+</div>
 
 </body>
 </html>

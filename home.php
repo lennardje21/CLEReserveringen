@@ -3,6 +3,7 @@ session_start();
 if (isset($_SESSION['usertype'])) {
     $userType = $_SESSION['usertype'];
 }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -11,6 +12,7 @@ if (isset($_SESSION['usertype'])) {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Home</title>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="js/script.js"></script>
 </head>
 
@@ -62,12 +64,27 @@ if (isset($_SESSION['usertype'])) {
         </ul>
     </nav>
 </header>
+
     <main>
+        <img src="images/PLSTKimg.jpg" alt="test">
     </main>
 
-    <footer>
+    <div class="footer">
+        <div class="openingstijden">
+            <strong>openingstijden</strong>
+            <p>Maandag t/m Zondag 10.00-17.00</p>
+        </div>
+        <div class="socials">
+            <a href="https://facebook.com/plstkcafe" target="_blank"><i class="fa fa-facebook-f"></i></a>
 
-    </footer>
-
+            <a href="https://instagram.com/plstkcafe/" target="_blank"><i class="fa fa-instagram"></i></a>
+        </div>
+        <div class="contact">
+            <strong>Contact</strong>
+            <p> info@plstkcafe.nl</p>
+            <p>+31 174 785 016</p>
+            <p>Helmweg 7, 3151HE, Hoek van Holland</p>
+        </div>
+    </div>
 </body>
 </html>

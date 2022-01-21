@@ -7,6 +7,7 @@ if (isset($_SESSION['usertype'])) {
     /** @var $db */
     require_once 'includes/reserveringenDB.php';
 
+    // creëert een random code met een lengte van 10 character
 function generateRandomString($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
@@ -17,9 +18,8 @@ function generateRandomString($length = 10) {
     return $randomString;
 }
 
-
     if (isset($_POST['submit'])){
-
+        //ik gebruik hier mysqli_escape_string om eventuele SQL injections op te vangen
         $name           = mysqli_escape_string($db, $_POST['name']);
         $email          = mysqli_escape_string($db, $_POST['email']);
         $telNummer      = mysqli_escape_string($db, $_POST['phone_number']);
@@ -51,15 +51,19 @@ function generateRandomString($length = 10) {
                 $comment = 'geen opmerking';
             }
 
-            $query = "INSERT INTO reserveringen(name, email, phone_number, date, time , personen, opmerkingen, unique_code)
+            $query = "INSERT INTO reserveringen(name, email, phone_number, date, time , amountOfPeople, comment, unique_code)
                     VALUES ('$name', '$email', '$telNummer', '$date', '$time', '$amountOfPeople', '$comment', '$uniqueCode')";
             $result = mysqli_query($db, $query);
 
-            $query2 = "SELECT MAX(`id`) from reserveringen";
-            $currentId = mysqli_query($db, $query2);
+            $query2 = "SELECT MAX(`id`) as id from reserveringen";
+            $checkId = mysqli_query($db, $query2);
+            $currentId = mysqli_fetch_assoc($checkId);
+            $id = $currentId['id'];
+            $reservationPlaced = true;
         }
     }
 ?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -67,6 +71,7 @@ function generateRandomString($length = 10) {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Reserveren</title>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="js/script.js"></script>
 
 </head>
@@ -126,6 +131,7 @@ function generateRandomString($length = 10) {
             <label for="name">Naam *</label>
             <input required type="text" name="name" id="name"
                    value="<?= isset($name) ? $name : '' ?>"/>
+            <!-- de code bij value zorgt ervoor dat als je al eens iets hebt ingevuld dit onthoudt wordt -->
             <br>
             <label for="email">Email *</label>
             <input required type="email" name="email" id="email"
@@ -151,15 +157,30 @@ function generateRandomString($length = 10) {
             <input type="text" name="comment" id="comment"
                    value="<?= isset($comment) ? $comment : '' ?>"/>
             <br>
+            <!-- Hier wordt de functie generateRandomString aangeroepen  -->
             <input type="hidden" name="unique_code" value="<?= generateRandomString() ?>"/>
-
             <input type="submit" name="submit" value="Bevestig"/>
+
         </form>
     </main>
 
-<footer>
+<div class="footer">
+    <div class="openingstijden">
+        <strong>openingstijden</strong>
+        <p>Maandag t/m Zondag 10.00-17.00</p>
+    </div>
+    <div class="socials">
+        <a href="https://facebook.com/plstkcafe" target="_blank"><i class="fa fa-facebook-f"></i></a>
 
-</footer>
+        <a href="https://instagram.com/plstkcafe/" target="_blank"><i class="fa fa-instagram"></i></a>
+    </div>
+    <div class="contact">
+        <strong>Contact</strong>
+        <p> info@plstkcafe.nl</p>
+        <p>+31 174 785 016</p>
+        <p>Helmweg 7, 3151HE, Hoek van Holland</p>
+    </div>
+</div>
 
 </body>
 </html>

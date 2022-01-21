@@ -5,22 +5,24 @@ if (isset($_SESSION['usertype'])) {
     $userType = $_SESSION['usertype'];
 }
 /** @var $db */
-/** @var $reservering */
+/** @var $reservation */
+
 require_once 'includes/reserveringenDB.php';
 
 if(!isset($_GET['id']) || $_GET['id'] === '' || !isset($_GET['uniqueCode']) || $_GET['uniqueCode'] === '') {
-    // redirect to index.php
+    // wanneer iemand fout de url aanpast wordt de gebruiker terug gestuurd naar het reservering.php scherm
     header('Location: reservering.php');
     exit;
 }
 
 if (isset($_GET['id'])){
+    /* hier wordt opgehaald welke reservering er gewijzigd moet worden */
     $id= mysqli_escape_string($db,$_GET['id']);
     $uniqueCode= mysqli_escape_string($db, $_GET['uniqueCode']);
 
     $codeChecker = "SELECT * FROM reserveringen WHERE id='$id' && unique_code='$uniqueCode'";
     $result = mysqli_query($db, $codeChecker);
-    $reservering = mysqli_fetch_assoc($result);
+    $reservation = mysqli_fetch_assoc($result);
 
     if (mysqli_num_rows($result) == 0) {
         header('Location: reservering.php');
@@ -38,8 +40,8 @@ if (isset($_POST['submit'])){
     $telNummer      = mysqli_escape_string($db, $_POST['phone_number']);
     $date           = mysqli_escape_string($db, $_POST['date']);
     $time           = mysqli_escape_string($db, $_POST['time']);
-    $personen       = mysqli_escape_string($db, $_POST['personen']);
-    $opmerkingen    = mysqli_escape_string($db, $_POST['opmerkingen']);
+    $amountOfPeople = mysqli_escape_string($db, $_POST['personen']);
+    $comment        = mysqli_escape_string($db, $_POST['opmerkingen']);
 
     $errors = [];
     if ($name === ''){
@@ -54,16 +56,15 @@ if (isset($_POST['submit'])){
     if ($time === ''){
         $errors[] = 'Tijd mag niet leeg zijn';
     }
-    if ($personen === ''){
+    if ($amountOfPeople === ''){
         $errors[] = 'Personen mag niet leeg zijn';
     }
-
     if (empty($errors)){
-        if ($opmerkingen === ''){
-            $opmerkingen = 'geen opmerking';
+        if ($comment === ''){
+            $comment = 'geen opmerking';
         }
-
-        $query = "UPDATE reserveringen SET name='$name', email='$email', phone_number='$telNummer', date='$date', time='$time', personen='$personen', opmerkingen='$opmerkingen' WHERE id = '$id' && unique_code ='$uniqueCode'";
+        $query = "UPDATE reserveringen SET name='$name', email='$email', phone_number='$telNummer',
+                         date='$date', time='$time', amountOfPeople='$amountOfPeople', comment='$comment' WHERE id = '$id' && unique_code ='$uniqueCode'";
         $result = mysqli_query($db, $query);
     }
     header('Location: reservering.php');
@@ -77,6 +78,7 @@ if (isset($_POST['submit'])){
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Edit</title>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="js/script.js"></script>
 
 </head>
@@ -133,39 +135,53 @@ if (isset($_POST['submit'])){
     <form action="" method="post" class="inputField">
         <label for="name">Naam *</label>
         <input required type="text" name="name" id="name"
-               value="<?= $reservering['name'] ?>"/>
+               value="<?= $reservation['name'] ?>"/>
         <br>
         <label for="email">Email *</label>
         <input required type="email" name="email" id="email"
-               value="<?= $reservering['email'] ?>"/>
+               value="<?= $reservation['email'] ?>"/>
         <br>
         <label for="nummer">Telefoonnummer</label>
         <input type="text" name="phone_number" id="nummer"
-               value="<?= $reservering['phone_number'] ?>"/>
+               value="<?= $reservation['phone_number'] ?>"/>
         <br>
         <label for="date">Datum *</label>
         <input required type="date" name="date" id="date"
-               value="<?= $reservering['date'] ?>" min="<?= date('Y-m-d') ?>"/>
+               value="<?= $reservation['date'] ?>" min="<?= date('Y-m-d') ?>"/>
         <br>
         <label for="time">Tijd *</label>
         <input required type="time" name="time" step="3600" id="time" min="11:00" max="17:00"
-               value="<?= $reservering['time'] ?>"/>
+               value="<?= $reservation['time'] ?>"/>
         <br>
         <label for="personen">Personen *</label>
         <input required type="number" name="personen" id="personen"
-               value="<?= $reservering['personen'] ?>"/>
+               value="<?= $reservation['amountOfPeople'] ?>"/>
         <br>
         <label for="opmerking">Opmerkingen</label>
         <input type="text" name="opmerkingen" id="opmerking"
-               value="<?= $reservering['opmerkingen'] ?>"/>
+               value="<?= $reservation['comment'] ?>"/>
         <br>
         <input type="submit" name="submit" value="Bevestig"/>
     </form>
 </main>
 
-<footer>
+<div class="footer">
+    <div class="openingstijden">
+        <strong>openingstijden</strong>
+        <p>Maandag t/m Zondag 10.00-17.00</p>
+    </div>
+    <div class="socials">
+        <a href="https://facebook.com/plstkcafe" target="_blank"><i class="fa fa-facebook-f"></i></a>
 
-</footer>
+        <a href="https://instagram.com/plstkcafe/" target="_blank"><i class="fa fa-instagram"></i></a>
+    </div>
+    <div class="contact">
+        <strong>Contact</strong>
+        <p> info@plstkcafe.nl</p>
+        <p>+31 174 785 016</p>
+        <p>Helmweg 7, 3151HE, Hoek van Holland</p>
+    </div>
+</div>
 
 </body>
 </html>

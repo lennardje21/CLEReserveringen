@@ -35,12 +35,14 @@ const btn = document.getElementById("openModal");
 
 btn.onclick = function(){
     modal.style.display = "block";
-}
+};
 
 window.onclick = function(event) {
     if (event.target === modal){
         modal.style.display = "none";
     }
+};
+
+function showInfo(id, uniqueCode) {
+    alert(`Uw reservering is succesvol geplaatst\nSla deze codes op zodat u later wijzigingen kan doorvoeren.\nid = ${id}\ncode = ${uniqueCode}`)
 }
-
-
