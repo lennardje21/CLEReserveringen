@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
         $errors['peopleError'] = 'Personen mag niet leeg zijn';
     }
 
-    if (empty($errors) && (!isset($someOneTriedScripting))) {
+    if (empty($errors)) {
         if ($comment === '') {
             $comment = 'geen opmerking';
         }
