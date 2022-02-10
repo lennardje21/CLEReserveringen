@@ -126,15 +126,15 @@ if (isset($_POST['delete'])){
 
                     <tbody>
                         <tr>
-                            <td><?= $reservation['name'] ?></td>
-                            <td><?= $reservation['amountOfPeople'] ?></td>
+                            <td><?= htmlspecialchars($reservation['name']) ?></td>
+                            <td><?= htmlspecialchars($reservation['amountOfPeople']) ?></td>
                             <!-- format date naar de Europese manier van de datum schrijven -->
-                            <td><?= $newDate = date("d-m-Y",strtotime($reservation['date'])); ?></td>
+                            <td><?= htmlspecialchars($newDate = date("d-m-Y",strtotime($reservation['date']))); ?></td>
                             <!-- zorgt dat alleen de uren en minuten getoond worden, als je dit niet zou doen zouden ook de seconden getoond worden -->
-                            <td><?= $newTime = date("H:i", strtotime($reservation['time'])); ?></td>
-                            <td><?= $reservation['email'] ?></td>
-                            <td><?= $reservation['phone_number'] ?></td>
-                            <td><?= $reservation['comment'] ?></td>
+                            <td><?= htmlspecialchars($newTime = date("H:i", strtotime($reservation['time']))); ?></td>
+                            <td><?= htmlspecialchars($reservation['email']) ?></td>
+                            <td><?= htmlspecialchars($reservation['phone_number']) ?></td>
+                            <td><?= htmlspecialchars($reservation['comment']) ?></td>
                             <td>
                                 <a href="edit.php?id=<?= $reservation['id'] ?>&uniqueCode=<?= $reservation['unique_code'] ?>" class="hrefToButton">edit</a>
                             </td>

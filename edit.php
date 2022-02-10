@@ -35,30 +35,31 @@ if (isset($_POST['submit'])){
 
     $id             = $_GET['id'];
     $uniqueCode     = $_GET['uniqueCode'];
-    $name           = mysqli_escape_string($db, $_POST['name']);
-    $email          = mysqli_escape_string($db, $_POST['email']);
-    $telNummer      = mysqli_escape_string($db, $_POST['phone_number']);
-    $date           = mysqli_escape_string($db, $_POST['date']);
-    $time           = mysqli_escape_string($db, $_POST['time']);
-    $amountOfPeople = mysqli_escape_string($db, $_POST['personen']);
-    $comment        = mysqli_escape_string($db, $_POST['opmerkingen']);
+    $name           = htmlspecialchars(mysqli_escape_string($db, $_POST['name']));
+    $email          = htmlspecialchars(mysqli_escape_string($db, $_POST['email']));
+    $telNummer      = htmlspecialchars(mysqli_escape_string($db, $_POST['phone_number']));
+    $date           = htmlspecialchars(mysqli_escape_string($db, $_POST['date']));
+    $time           = htmlspecialchars(mysqli_escape_string($db, $_POST['time']));
+    $amountOfPeople = htmlspecialchars(mysqli_escape_string($db, $_POST['personen']));
+    $comment        = htmlspecialchars(mysqli_escape_string($db, $_POST['opmerkingen']));
 
     $errors = [];
-    if ($name === ''){
-        $errors[] = 'Naam mag niet leeg zijn';
+    if ($name == '') {
+        $errors['nameError'] = 'Naam mag niet leeg zijn';
     }
-    if ($email === ''){
-        $errors[] = 'Email mag niet leeg zijn';
+    if ($email == '') {
+        $errors['emailError'] = 'Email mag niet leeg zijn';
     }
-    if ($date === ''){
-        $errors[] = 'Datum mag niet leeg zijn';
+    if ($date == '') {
+        $errors['dateError'] = 'Datum mag niet leeg zijn';
     }
-    if ($time === ''){
-        $errors[] = 'Tijd mag niet leeg zijn';
+    if ($time == '') {
+        $errors['timeError'] = 'Tijd mag niet leeg zijn';
     }
-    if ($amountOfPeople === ''){
-        $errors[] = 'Personen mag niet leeg zijn';
+    if ($amountOfPeople == '') {
+        $errors['peopleError'] = 'Personen mag niet leeg zijn';
     }
+
     if (empty($errors)){
         if ($comment === ''){
             $comment = 'geen opmerking';
@@ -133,33 +134,33 @@ if (isset($_POST['submit'])){
 
 <main class="reserveren">
     <form action="" method="post" class="inputField">
-        <label for="name">Naam *</label>
-        <input required type="text" name="name" id="name"
-               value="<?= $reservation['name'] ?>"/>
+        <label for="name"><?= isset($errors['nameError']) ? $errors['nameError'] : 'Naam *' ?></label>
+        <input type="text" name="name" id="name"
+               value="<?= htmlspecialchars($reservation['name']) ?>"/>
         <br>
-        <label for="email">Email *</label>
-        <input required type="email" name="email" id="email"
-               value="<?= $reservation['email'] ?>"/>
+        <label for="email"><?= isset($errors['emailError']) ? $errors['emailError'] : 'Email *' ?></label>
+        <input type="email" name="email" id="email"
+               value="<?= htmlspecialchars($reservation['email']) ?>"/>
         <br>
         <label for="nummer">Telefoonnummer</label>
         <input type="text" name="phone_number" id="nummer"
-               value="<?= $reservation['phone_number'] ?>"/>
+               value="<?= htmlspecialchars($reservation['phone_number']) ?>"/>
         <br>
-        <label for="date">Datum *</label>
-        <input required type="date" name="date" id="date"
-               value="<?= $reservation['date'] ?>" min="<?= date('Y-m-d') ?>"/>
+        <label for="date"><?= isset($errors['dateError']) ? $errors['dateError'] : 'Datum *' ?></label>
+        <input type="date" name="date" id="date"
+               value="<?= htmlspecialchars($reservation['date']) ?>" min="<?= date('Y-m-d') ?>"/>
         <br>
-        <label for="time">Tijd *</label>
-        <input required type="time" name="time" step="3600" id="time" min="11:00" max="17:00"
-               value="<?= $reservation['time'] ?>"/>
+        <label for="time"><?= isset($errors['timeError']) ? $errors['timeError'] : 'Tijd *' ?></label>
+        <input type="time" name="time" step="3600" id="time" min="11:00" max="17:00"
+               value="<?= htmlspecialchars($reservation['time']) ?>"/>
         <br>
-        <label for="personen">Personen *</label>
-        <input required type="number" name="personen" id="personen"
-               value="<?= $reservation['amountOfPeople'] ?>"/>
+        <label for="personen"><?= isset($errors['peopleError']) ? $errors['peopleError'] : 'Personen *' ?></label>
+        <input type="number" name="personen" id="personen"
+               value="<?= htmlspecialchars($reservation['amountOfPeople']) ?>"/>
         <br>
         <label for="opmerking">Opmerkingen</label>
         <input type="text" name="opmerkingen" id="opmerking"
-               value="<?= $reservation['comment'] ?>"/>
+               value="<?= htmlspecialchars($reservation['comment']) ?>"/>
         <br>
         <input type="submit" name="submit" value="Bevestig"/>
     </form>

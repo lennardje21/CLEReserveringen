@@ -135,13 +135,13 @@ if (isset($_POST['delete'])){
             <tbody>
                 <?php foreach($reservations as $reservation) {?>
                     <tr>
-                        <td><?= $reservation['name'] ?></td>
-                        <td><?= $reservation['amountOfPeople'] ?></td>
-                        <td><?= $newDate = date("d-m-Y",strtotime($reservation['date'])); ?></td>
-                        <td><?= $newTime = date("H:i", strtotime($reservation['time'])); ?></td>
-                        <td><?= $reservation['email'] ?></td>
-                        <td><?= $reservation['phone_number'] ?></td>
-                        <td><?= $reservation['comment'] ?></td>
+                        <td><?= htmlspecialchars($reservation['name']) ?></td>
+                        <td><?= htmlspecialchars($reservation['amountOfPeople']) ?></td>
+                        <td><?= htmlspecialchars($newDate = date("d-m-Y",strtotime($reservation['date']))); ?></td>
+                        <td><?= htmlspecialchars($newTime = date("H:i", strtotime($reservation['time']))); ?></td>
+                        <td><?= htmlspecialchars($reservation['email']) ?></td>
+                        <td><?= htmlspecialchars($reservation['phone_number']) ?></td>
+                        <td><?= htmlspecialchars($reservation['comment']) ?></td>
                         <td>
                             <form action="" method="post">
                                 <button id="editBtn" value="<?= $reservation['id'] ?>">Edit</button>
