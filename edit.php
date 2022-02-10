@@ -35,13 +35,13 @@ if (isset($_POST['submit'])){
 
     $id             = $_GET['id'];
     $uniqueCode     = $_GET['uniqueCode'];
-    $name           = htmlspecialchars(mysqli_escape_string($db, $_POST['name']));
-    $email          = htmlspecialchars(mysqli_escape_string($db, $_POST['email']));
-    $telNummer      = htmlspecialchars(mysqli_escape_string($db, $_POST['phone_number']));
-    $date           = htmlspecialchars(mysqli_escape_string($db, $_POST['date']));
-    $time           = htmlspecialchars(mysqli_escape_string($db, $_POST['time']));
-    $amountOfPeople = htmlspecialchars(mysqli_escape_string($db, $_POST['personen']));
-    $comment        = htmlspecialchars(mysqli_escape_string($db, $_POST['opmerkingen']));
+    $name           = htmlspecialchars(mysqli_escape_string($db, $_POST['name']), ENT_QUOTES);
+    $email          = htmlspecialchars(mysqli_escape_string($db, $_POST['email']), ENT_QUOTES);
+    $telNummer      = htmlspecialchars(mysqli_escape_string($db, $_POST['phone_number']), ENT_QUOTES);
+    $date           = htmlspecialchars(mysqli_escape_string($db, $_POST['date']), ENT_QUOTES);
+    $time           = htmlspecialchars(mysqli_escape_string($db, $_POST['time']), ENT_QUOTES);
+    $amountOfPeople = htmlspecialchars(mysqli_escape_string($db, $_POST['personen']), ENT_QUOTES);
+    $comment        = htmlspecialchars(mysqli_escape_string($db, $_POST['opmerkingen']), ENT_QUOTES);
 
     $errors = [];
     if ($name == '') {
@@ -136,31 +136,31 @@ if (isset($_POST['submit'])){
     <form action="" method="post" class="inputField">
         <label for="name"><?= isset($errors['nameError']) ? $errors['nameError'] : 'Naam *' ?></label>
         <input type="text" name="name" id="name"
-               value="<?= htmlspecialchars($reservation['name']) ?>"/>
+               value="<?= htmlspecialchars($reservation['name'], ENT_QUOTES) ?>"/>
         <br>
         <label for="email"><?= isset($errors['emailError']) ? $errors['emailError'] : 'Email *' ?></label>
         <input type="email" name="email" id="email"
-               value="<?= htmlspecialchars($reservation['email']) ?>"/>
+               value="<?= htmlspecialchars($reservation['email'], ENT_QUOTES) ?>"/>
         <br>
         <label for="nummer">Telefoonnummer</label>
         <input type="text" name="phone_number" id="nummer"
-               value="<?= htmlspecialchars($reservation['phone_number']) ?>"/>
+               value="<?= htmlspecialchars($reservation['phone_number'], ENT_QUOTES) ?>"/>
         <br>
         <label for="date"><?= isset($errors['dateError']) ? $errors['dateError'] : 'Datum *' ?></label>
         <input type="date" name="date" id="date"
-               value="<?= htmlspecialchars($reservation['date']) ?>" min="<?= date('Y-m-d') ?>"/>
+               value="<?= htmlspecialchars($reservation['date'], ENT_QUOTES) ?>" min="<?= date('Y-m-d') ?>"/>
         <br>
         <label for="time"><?= isset($errors['timeError']) ? $errors['timeError'] : 'Tijd *' ?></label>
         <input type="time" name="time" step="3600" id="time" min="11:00" max="17:00"
-               value="<?= htmlspecialchars($reservation['time']) ?>"/>
+               value="<?= htmlspecialchars($reservation['time'], ENT_QUOTES) ?>"/>
         <br>
         <label for="personen"><?= isset($errors['peopleError']) ? $errors['peopleError'] : 'Personen *' ?></label>
         <input type="number" name="personen" id="personen"
-               value="<?= htmlspecialchars($reservation['amountOfPeople']) ?>"/>
+               value="<?= htmlspecialchars($reservation['amountOfPeople'], ENT_QUOTES) ?>"/>
         <br>
         <label for="opmerking">Opmerkingen</label>
         <input type="text" name="opmerkingen" id="opmerking"
-               value="<?= htmlspecialchars($reservation['comment']) ?>"/>
+               value="<?= htmlspecialchars($reservation['comment'], ENT_QUOTES) ?>"/>
         <br>
         <input type="submit" name="submit" value="Bevestig"/>
     </form>

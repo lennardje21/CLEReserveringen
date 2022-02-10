@@ -12,14 +12,14 @@ if (isset($_POST['submit'])) {
     //ik gebruik hier mysqli_escape_string om eventuele SQL injections op te vangen
     /* Ook maak ik gebruik van htmlspecialchars om xss op te vangen en te voorkomen,
     door deze tag worden speciale karakters omgezet naar iets anders waardoor ze niet meer dezelfde functie hebben */
-    $name               = htmlspecialchars(mysqli_escape_string($db, $_POST['name']), ENT_COMPAT);
-    $email              = htmlspecialchars(mysqli_escape_string($db, $_POST['email']), ENT_COMPAT);
-    $telNummer          = htmlspecialchars(mysqli_escape_string($db, $_POST['phone_number']), ENT_COMPAT);
-    $date               = htmlspecialchars(mysqli_escape_string($db, $_POST['date']), ENT_COMPAT);
-    $time               = htmlspecialchars(mysqli_escape_string($db, $_POST['time']), ENT_COMPAT);
-    $amountOfPeople     = htmlspecialchars(mysqli_escape_string($db, $_POST['amountOfPeople']), ENT_COMPAT);
-    $comment            = htmlspecialchars(mysqli_escape_string($db, $_POST['comment']), ENT_COMPAT);
-    $uniqueCode         = htmlspecialchars(mysqli_escape_string($db, $_POST['unique_code']), ENT_COMPAT);
+    $name               = htmlspecialchars(mysqli_escape_string($db, $_POST['name']), ENT_QUOTES);
+    $email              = htmlspecialchars(mysqli_escape_string($db, $_POST['email']), ENT_QUOTES);
+    $telNummer          = htmlspecialchars(mysqli_escape_string($db, $_POST['phone_number']), ENT_QUOTES);
+    $date               = htmlspecialchars(mysqli_escape_string($db, $_POST['date']), ENT_QUOTES);
+    $time               = htmlspecialchars(mysqli_escape_string($db, $_POST['time']), ENT_QUOTES);
+    $amountOfPeople     = htmlspecialchars(mysqli_escape_string($db, $_POST['amountOfPeople']), ENT_QUOTES);
+    $comment            = htmlspecialchars(mysqli_escape_string($db, $_POST['comment']), ENT_QUOTES);
+    $uniqueCode         = htmlspecialchars(mysqli_escape_string($db, $_POST['unique_code']), ENT_QUOTES);
 
     $errors = [];
     if ($name == '') {
@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
         $errors['peopleError'] = 'Personen mag niet leeg zijn';
     }
 
-    if (empty($errors) && (!isset($someOneTriedScripting))) {
+    if (empty($errors)) {
         if ($comment === '') {
             $comment = 'geen opmerking';
         }
@@ -132,32 +132,32 @@ function generateRandomString($length = 10) {
         <form action="reserveren.php" method="post" class="inputField">
             <label for="name"><?= isset($errors['nameError']) ? $errors['nameError'] : 'Naam' ?></label>
             <input type="text" name="name" id="name"
-                   value="<?= isset($name) ? htmlspecialchars($name, ENT_COMPAT) : '' ?>"/>
+                   value="<?= isset($name) ? htmlspecialchars($name, ENT_QUOTES) : '' ?>"/>
             <!-- de code bij value zorgt ervoor dat als je al eens iets hebt ingevuld dit onthoudt wordt -->
             <br>
             <label for="email"><?= isset($errors['emailError']) ? $errors['emailError'] : 'Email' ?></label>
             <input type="email" name="email" id="email"
-                   value="<?= isset($email) ? htmlspecialchars($email, ENT_COMPAT) : '' ?>"/>
+                   value="<?= isset($email) ? htmlspecialchars($email, ENT_QUOTES) : '' ?>"/>
             <br>
             <label for="nummer">Telefoonnummer</label>
             <input type="text" name="phone_number" id="nummer"
-                   value="<?= isset($telNummer) ? htmlspecialchars($telNummer, ENT_COMPAT) : '' ?>"/>
+                   value="<?= isset($telNummer) ? htmlspecialchars($telNummer, ENT_QUOTES) : '' ?>"/>
             <br>
             <label for="date"><?= isset($errors['dateError']) ? $errors['dateError'] : 'Datum' ?></label>
             <input type="date" name="date" id="date"
-                   value="<?= isset($date) ? htmlspecialchars($date, ENT_COMPAT) : '' ?>" min="<?= date('Y-m-d') ?>"/>
+                   value="<?= isset($date) ? htmlspecialchars($date, ENT_QUOTES) : '' ?>" min="<?= date('Y-m-d') ?>"/>
             <br>
             <label for="time"><?= isset($errors['timeError']) ? $errors['timeError'] : 'Tijd' ?></label>
             <input type="time" name="time" step="3600" id="time" min="11:00" max="17:00"
-                   value="<?= isset($time) ? htmlspecialchars($time, ENT_COMPAT) : '' ?>"/>
+                   value="<?= isset($time) ? htmlspecialchars($time, ENT_QUOTES) : '' ?>"/>
             <br>
             <label for="amountOfPeople"><?= isset($errors['peopleError']) ? $errors['peopleError'] : 'Personen' ?></label>
             <input type="number" name="amountOfPeople" id="amountOfPeople"
-                   value="<?= isset($amountOfPeople) ? htmlspecialchars($amountOfPeople, ENT_COMPAT) : '' ?>"/>
+                   value="<?= isset($amountOfPeople) ? htmlspecialchars($amountOfPeople, ENT_QUOTES) : '' ?>"/>
             <br>
             <label for="comment">Opmerkingen</label>
             <input type="text" name="comment" id="comment"
-                   value="<?= isset($comment) ? htmlspecialchars($comment, ENT_COMPAT) : '' ?>"/>
+                   value="<?= isset($comment) ? htmlspecialchars($comment, ENT_QUOTES) : '' ?>"/>
             <br>
             <!-- Hier wordt de functie generateRandomString aangeroepen  -->
             <input type="hidden" name="unique_code" value="<?= generateRandomString() ?>"/>
